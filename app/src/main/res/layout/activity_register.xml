@@ -9,17 +9,20 @@
     tools:context=".Register">
 
     <EditText
+        android:id="@+id/etName"
         android:hint="Enter Name"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <EditText
+        android:id="@+id/etSalary"
         android:hint="Enter Salary"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <EditText
+        android:id="@+id/etAge"
         android:hint="Enter Age"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
@@ -27,6 +30,7 @@
     
     <Button
         android:text="REGISTER"
+        android:id="@+id/btnRegister"
         android:layout_margin="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
