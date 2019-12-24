@@ -10,6 +10,7 @@
 
 
     <EditText
+        android:id="@+id/empno"
         android:hint="Enter Employee No"
         android:layout_width="match_parent"
         android:layout_margin="20dp"
@@ -17,6 +18,7 @@
 
 
     <Button
+        android:id="@+id/btnSearch"
         android:text="Search"
         android:layout_marginRight="30dp"
         android:layout_marginLeft="30dp"
@@ -24,27 +26,35 @@
         android:layout_height="wrap_content"/>
 
     <EditText
+        android:id="@+id/etEmpID"
         android:hint="Employee No"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <EditText
+        android:id="@+id/etSalary"
         android:hint="Employee Salary"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <EditText
-        android:hint="Employee No"
+        android:id="@+id/etage"
+        android:hint="Employee Age"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <Button
+        android:id="@+id/btnUpdate"
         android:text="UPDATE"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
-
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnDelete"
+        android:layout_margin="20dp"
+        android:text="DELETE"/>
 </LinearLayout>
