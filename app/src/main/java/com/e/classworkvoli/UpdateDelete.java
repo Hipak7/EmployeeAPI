@@ -3,6 +3,7 @@ package com.e.classworkvoli;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,62 +23,116 @@ public class UpdateDelete extends AppCompatActivity {
     private EditText etEmployeeNo,etEmpName,etEmpSalary,etEmpAge;
     private Button btnSearchUpdate,btnUpdate,btnDelete;
     Retrofit retrofit;
-    EmployeeAPI employeeApi;
+    EmployeeAPI employeeAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_delete);
-        btnDelete=findViewById(R.id.btnDelete);
-        btnUpdate=findViewById(R.id.btnUpdate);
-        etEmpName=findViewById(R.id.etName);
-        etEmpAge=findViewById(R.id.etAge);
-        etEmpSalary=findViewById(R.id.etSalary);
+        btnDelete = findViewById(R.id.btnDelete);
+        btnUpdate = findViewById(R.id.btnUpdate);
+        btnSearchUpdate = findViewById(R.id.btnSearch);
+        etEmployeeNo = findViewById(R.id.etEmpID);
+        etEmpName = findViewById(R.id.etName);
+        etEmpAge = findViewById(R.id.etAge);
+        etEmpSalary = findViewById(R.id.etSalary);
 
-        EmployeeCUD employee;
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
+        btnSearchUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadData();
             }
-            private void loadData(){
 
-                EmployeeAPI employeeAPI= URL.createInstance().create(EmployeeAPI.class);
-                Call<Employee>employeeCall=employeeApi.getEmployeeByID(Integer.parseInt(etEmployeeNo.getText().toString()));
-                employeeCall.enqueue(new Callback<Employee>() {
-                    @Override
-                    public void onResponse(Call<Employee> call, Response<Employee> response) {
-                        etEmpName.setText(response.body().getEmployee_name());
-                        etEmpAge.setText(response.body().getEmployee_age());
-                        etEmpSalary.setText(response.body().getEmployee_salary());
-                        }
 
-                    @Override
-                    public void onFailure(Call<Employee> call, Throwable t) {
-                        Toast.makeText(UpdateDelete.this, "Error" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        });
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateEmployee();
+            }
+        });
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View v) {
+                                             deleteEmployee();
+                                         }
+                                     }
 
+        );
+    }
+
+    private void deleteEmployee() {
+        final EmployeeAPI employeeApi = URL.createInstance().create(EmployeeAPI.class);
+        Call<Void> voidCall = employeeApi.deleteEmployee(Integer.parseInt(etEmployeeNo.getText().toString()));
+
+        voidCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(UpdateDelete.this, "Sucessfully deleted", Toast.LENGTH_SHORT).show();
+                etEmployeeNo.setText("");
+                etEmpName.setText("");
+                etEmpAge.setText("");
+                etEmpSalary.setText("");
 
 
             }
 
-            private void updateEmployee(){
-                EmployeeCUD employeeCUD=new EmployeeCUD(
-                        etEmpName.getText().toString(),
-                        Float.parseFloat(etEmpSalary.getText().toString()),
-                        Integer.parseInt(etEmpAge.getText().toString())
-                );
-                EmployeeAPI employeeAPI= URL.createInstance().create(EmployeeAPI.class);
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(UpdateDelete.this, "Error" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        });
+    }
+            private void updateEmployee() {
+        EmployeeCUD employeeCUD=new EmployeeCUD(
                 etEmpName.getText().toString(),
                 Float.parseFloat(etEmpSalary.getText().toString()),
-                Integer.parseInt(etEmpAge.getText().toString())
+                Integer.parseInt(etEmpSalary.getText().toString())
+        );
+        Call<Void> voidCall=employeeAPI.updateEmployee(Integer.parseInt(etEmployeeNo.getText().toString()),employeeCUD);
 
-            };
-            Call<Void> voidCall=employeeApi.updateEmployee(Integer.parseInt(etEmployeeNo.getText().toString()),e);
+        voidCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(UpdateDelete.this, "Updated", Toast.LENGTH_SHORT).show();
+            }
 
-            voidCa
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(UpdateDelete.this, "Error"+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
 
     }
-}
+
+    private void loadData() {
+        if (TextUtils.isEmpty(etEmployeeNo.getText())){
+            etEmployeeNo.setError("Please enter employee id");
+            return;
+        }
+        employeeAPI =URL.createInstance().create(EmployeeAPI.class);
+        Call<Employee> listCall=employeeAPI.getEmployeeByID(Integer.parseInt(etEmployeeNo.getText().toString()));
+
+        listCall.enqueue(new Callback<Employee>() {
+            @Override
+            public void onResponse(Call<Employee> call, Response<Employee> response) {
+                etEmpName.setText(response.body().getEmployee_name());
+                etEmpSalary.setText(response.body().getEmployee_salary());
+                etEmpAge.setText(Integer.toString(response.body().getEmployee_age()));
+            }
+
+            @Override
+            public void onFailure(Call<Employee> call, Throwable t) {
+                Toast.makeText(UpdateDelete.this, "Error"+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    }
+
+
+
+
+
+
